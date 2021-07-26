@@ -1,0 +1,20 @@
+name: caesar_cipher
+version: "1.0"
+author: whosethink@gmail.com
+about: Caesar Cipher
+args:
+  - shift:
+      short: s
+      long: shift
+      value_name: shift
+      about: shift of cipher
+      takes_value: true
+      default_value: "0"
+      allow_hyphen_values: true
+  - text:
+      short: t
+      long: short
+      value_name: text
+      about: text to cipher
+      takes_value: true
+      default_value: ""
