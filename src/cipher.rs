@@ -5,6 +5,7 @@ pub struct Cipher {
 
 impl Cipher {
   pub fn new(shift: i8) -> Self {
+    assert!(shift <= 25 && shift >= -25, "CaesarCipher: shift => {}", shift);
     Cipher {
       shift
     }
@@ -37,5 +38,53 @@ impl Cipher {
       _ => {}
     }
     return result as char;
+  }
+}
+
+#[cfg(test)]
+mod cipher_test {
+
+  use super::*;
+
+  #[test]
+  fn cipher_ascii_char_test() {
+    let cipher = Cipher::new(0);
+    assert_eq!(cipher.cipher_ascii_char('A'), 'A');
+    assert_eq!(cipher.cipher_ascii_char('a'), 'a');
+    assert_eq!(cipher.cipher_ascii_char('Z'), 'Z');
+    assert_eq!(cipher.cipher_ascii_char('z'), 'z');
+
+    let cipher = Cipher::new(1);
+    assert_eq!(cipher.cipher_ascii_char('A'), 'B');
+    assert_eq!(cipher.cipher_ascii_char('a'), 'b');
+    assert_eq!(cipher.cipher_ascii_char('Z'), 'A');
+    assert_eq!(cipher.cipher_ascii_char('z'), 'a');
+
+    let cipher = Cipher::new(25);
+    assert_eq!(cipher.cipher_ascii_char('A'), 'Z');
+    assert_eq!(cipher.cipher_ascii_char('a'), 'z');
+    assert_eq!(cipher.cipher_ascii_char('Z'), 'Y');
+    assert_eq!(cipher.cipher_ascii_char('z'), 'y');
+
+    let cipher = Cipher::new(-1);
+    assert_eq!(cipher.cipher_ascii_char('A'), 'Z');
+    assert_eq!(cipher.cipher_ascii_char('a'), 'z');
+    assert_eq!(cipher.cipher_ascii_char('Z'), 'Y');
+    assert_eq!(cipher.cipher_ascii_char('z'), 'y');
+
+    let cipher = Cipher::new(-25);
+    assert_eq!(cipher.cipher_ascii_char('A'), 'B');
+    assert_eq!(cipher.cipher_ascii_char('a'), 'b');
+    assert_eq!(cipher.cipher_ascii_char('Z'), 'A');
+    assert_eq!(cipher.cipher_ascii_char('z'), 'a');
+  }
+
+  #[test]
+  fn cipher_char_test() {
+    let cipher = Cipher::new(1);
+    assert_eq!(cipher.cipher_char('A'), 'B');
+    assert_eq!(cipher.cipher_char('@'), '@');
+    assert_eq!(cipher.cipher_char(' '), ' ');
+    assert_eq!(cipher.cipher_char('咖'), '咖');
   }
 }
